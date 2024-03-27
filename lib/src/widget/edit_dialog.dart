@@ -65,6 +65,7 @@ class _EditDialogState extends State<EditDialog> {
             ExpandableCell<String>(
               columnTitle: oldCell.columnTitle,
               value: controllers[i].text,
+              isEditable: oldCell.isEditable,
             ),
           );
         } else if (oldCell.value is bool) {
@@ -72,6 +73,7 @@ class _EditDialogState extends State<EditDialog> {
             ExpandableCell<bool>(
               columnTitle: oldCell.columnTitle,
               value: controllers[i].text.parseToBool,
+              isEditable: oldCell.isEditable,
             ),
           );
         } else if (oldCell.value is int) {
@@ -79,6 +81,7 @@ class _EditDialogState extends State<EditDialog> {
             ExpandableCell<int>(
               columnTitle: oldCell.columnTitle,
               value: int.parse(controllers[i].text),
+              isEditable: oldCell.isEditable,
             ),
           );
         } else if (oldCell.value is double) {
@@ -86,6 +89,7 @@ class _EditDialogState extends State<EditDialog> {
             ExpandableCell<double>(
               columnTitle: oldCell.columnTitle,
               value: double.parse(controllers[i].text),
+              isEditable: oldCell.isEditable,
             ),
           );
         } else {
@@ -148,6 +152,7 @@ class _EditDialogState extends State<EditDialog> {
           controller: controllers[i],
           columnName: rowCells[i].columnTitle,
           valueType: rowCells[i].value.runtimeType,
+          isEditable: rowCells[i].isEditable,
         ),
       );
     }
@@ -162,12 +167,14 @@ class EditRow extends StatefulWidget {
   final TextEditingController controller;
   final String columnName;
   final Type valueType;
+  final bool isEditable;
 
   const EditRow(
       {Key? key,
       required this.controller,
       required this.columnName,
-      required this.valueType})
+      required this.valueType,
+      this.isEditable = true})
       : super(key: key);
 
   @override
@@ -187,11 +194,11 @@ class _EditRowState extends State<EditRow> {
           flex: 3,
           child: Padding(
             padding: const EdgeInsets.symmetric(vertical: 3),
-            child: widget.valueType == bool
-                ? buildBoolInput(widget.controller)
-                : buildTextInput(
-                    widget.controller,
-                  ),
+            child: widget.isEditable
+                ? (widget.valueType == bool
+                    ? buildBoolInput(widget.controller)
+                    : buildTextInput(widget.controller))
+                : Text(widget.controller.text), //
           ),
         )
       ],

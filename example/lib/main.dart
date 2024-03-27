@@ -85,7 +85,7 @@ class _HomePageState extends State<HomePage> {
 
     rows = userList.map<ExpandableRow>((e) {
       return ExpandableRow(cells: [
-        ExpandableCell<int>(columnTitle: "ID", value: e.id),
+        ExpandableCell<int>(columnTitle: "ID", value: e.id, isEditable: false),
         ExpandableCell<String>(columnTitle: "First name", value: e.firstName),
         ExpandableCell<String>(columnTitle: "Last name", value: e.lastName),
         ExpandableCell<String>(columnTitle: "Maiden name", value: e.maidenName),
@@ -141,15 +141,13 @@ class _HomePageState extends State<HomePage> {
                     headers: headers,
                     rows: rows,
                     multipleExpansion: false,
-                    isEditable: false,
+                    isEditable: true,
                     onRowChanged: (newRow) {
                       print(newRow.cells[01].value);
                     },
                     onPageChanged: (page) {
                       print(page);
                     },
-                    renderEditDialog: (row, onSuccess) =>
-                        _buildEditDialog(row, onSuccess),
                     visibleColumnCount: visibleCount,
                   ),
                 );
