@@ -70,6 +70,9 @@ class ExpandableThemeData {
   /// Icon image expanding expansion content.
   final Icon expansionIcon;
 
+  /// Icon image showing delete feature.
+  final Icon deleteIcon;
+
   /*************** Pagination Widget Theme Properties *******************/
   /// If the custom pagination widget is not used. These properties
   /// are used to customize default pagination widget.
@@ -114,6 +117,7 @@ class ExpandableThemeData {
     BorderSide? rowBorder,
     Icon? editIcon,
     Icon? expansionIcon,
+    Icon? deleteIcon,
     double? paginationSize,
     TextStyle? paginationTextStyle,
     Color? paginationSelectedTextColor,
@@ -153,6 +157,11 @@ class ExpandableThemeData {
       color: theme.unselectedWidgetColor,
       size: 18,
     );
+    deleteIcon ??= Icon(
+      Icons.delete,
+      color: theme.unselectedWidgetColor,
+      size: 16,
+    );
     paginationSize ??= 48;
 
     return ExpandableThemeData.raw(
@@ -172,6 +181,7 @@ class ExpandableThemeData {
       rowBorder: rowBorder,
       editIcon: editIcon,
       expansionIcon: expansionIcon,
+      deleteIcon: deleteIcon,
       paginationSize: paginationSize,
       paginationTextStyle: paginationTextStyle,
       paginationSelectedTextColor: paginationSelectedTextColor,
@@ -204,6 +214,7 @@ class ExpandableThemeData {
     required this.rowBorder,
     required this.editIcon,
     required this.expansionIcon,
+    required this.deleteIcon,
     required this.paginationSize,
     this.paginationTextStyle,
     this.paginationSelectedTextColor,

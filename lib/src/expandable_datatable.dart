@@ -65,6 +65,11 @@ class ExpandableDataTable extends StatefulWidget {
   /// Returns the new [ExpandableRow] data.`
   final void Function(ExpandableRow newRow)? onRowChanged;
 
+  /// Triggers when a row is deleted with [AlertDialog].
+  ///
+  /// Deletes the [ExpandableRow] data.`
+  final void Function(ExpandableRow newRow)? onRowDeleted;
+
   /// When the current page is changed, this returns the new page value.
   ///
   final void Function(int page)? onPageChanged;
@@ -165,6 +170,7 @@ class ExpandableDataTable extends StatefulWidget {
     this.multipleExpansion = true,
     this.isEditable = true,
     this.onRowChanged,
+    this.onRowDeleted,
     this.onPageChanged,
     this.renderEditDialog,
     this.renderCustomPagination,
@@ -308,6 +314,17 @@ class _ExpandableDataTableState extends State<ExpandableDataTable> {
     setState(() {});
   }
 
+  /// Delete a row after the row is selected with a delete dialog.
+  void _deleteRow(ExpandableRow deletedRow, int rowInd) {
+    _sortedRowsList[_currentPage][rowInd].row = deletedRow;
+
+    if (widget.onRowDeleted != null) {
+      widget.onRowDeleted!(deletedRow);
+    }
+
+    setState(() {});
+  }
+
   void _onExpansionChanged(bool value, int rowIndex) {
     if (widget.multipleExpansion == false) {
       if (_selectedRow == rowIndex && value == false) {
@@ -418,6 +435,9 @@ class _ExpandableDataTableState extends State<ExpandableDataTable> {
           trailingWidth: _trailingWidth,
           secondTrailing:
               widget.isEditable ? buildEditIcon(context, index) : null,
+          thirdTrailing: widget.isEditable
+              ? builDeleteIcon(context, index)
+              : null,
           onExpansionChanged: (value) => _onExpansionChanged(value, index),
           initiallyExpanded: _selectedRow == index,
           title: buildRowTitleContent(titleCells),
@@ -474,6 +494,15 @@ class _ExpandableDataTableState extends State<ExpandableDataTable> {
     );
   }
 
+  Widget builDeleteIcon(BuildContext context, int rowInd) {
+    return IconButton(
+      padding: EdgeInsets.zero,
+      constraints: const BoxConstraints(),
+      icon: context.expandableTheme.deleteIcon,
+      onPressed: () => showDeleteDialog(context, rowInd),
+    );
+  }
+
   Future<dynamic> showEditDialog(BuildContext context, int rowInd) {
     return showDialog(
       context: context,
@@ -486,6 +515,41 @@ class _ExpandableDataTableState extends State<ExpandableDataTable> {
               row: _sortedRowsList[_currentPage][rowInd].row,
               onSuccess: (newRow) => _updateRow(newRow, rowInd),
             ),
+    );
+  }
+
+  Future<dynamic> showDeleteDialog(BuildContext context, int rowInd) {
+    return showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('Delete Row'),
+          content: const Text(
+              'Are you sure you want to delete this row? This action cannot be undone.'
+          ),
+          actions: <Widget>[
+            TextButton(
+              style: TextButton.styleFrom(
+                textStyle: Theme.of(context).textTheme.labelLarge,
+              ),
+              child: const Text('Cancel'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              style: TextButton.styleFrom(
+                textStyle: Theme.of(context).textTheme.labelLarge,
+              ),
+              child: const Text('Delete'),
+              onPressed: () {
+                _deleteRow(_sortedRowsList[_currentPage][rowInd].row, rowInd);
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 }

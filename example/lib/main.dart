@@ -145,6 +145,10 @@ class _HomePageState extends State<HomePage> {
                     onRowChanged: (newRow) {
                       print(newRow.cells[01].value);
                     },
+                    onRowDeleted: (newRow) {
+                      print('test delete');
+                      print(newRow.cells[01].value);
+                    },
                     onPageChanged: (page) {
                       print(page);
                     },

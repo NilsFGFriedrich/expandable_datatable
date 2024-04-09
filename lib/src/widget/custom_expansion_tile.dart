@@ -63,6 +63,7 @@ class ExpansionTile extends StatefulWidget {
     this.controlAffinity,
     this.trailingWidth,
     this.secondTrailing,
+    this.thirdTrailing,
     this.showExpansionIcon,
     this.expansionIcon,
   })  : assert(
@@ -75,6 +76,7 @@ class ExpansionTile extends StatefulWidget {
   final bool? showExpansionIcon;
   final double? trailingWidth;
   final Widget? secondTrailing;
+  final Widget? thirdTrailing;
   final Icon? expansionIcon;
 
   /// A widget to display before the title.
@@ -357,6 +359,7 @@ class ExpansionTileState extends State<ExpansionTile>
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           widget.secondTrailing ?? Container(),
+          widget.thirdTrailing ?? Container(),
           Visibility(
             visible: widget.showExpansionIcon ?? true,
             child: GestureDetector(
