@@ -316,7 +316,8 @@ class _ExpandableDataTableState extends State<ExpandableDataTable> {
 
   /// Delete a row after the row is selected with a delete dialog.
   void _deleteRow(ExpandableRow deletedRow, int rowInd) {
-    _sortedRowsList[_currentPage][rowInd].row = deletedRow;
+    _sortedRowsList[_currentPage].removeAt(rowInd);
+
 
     if (widget.onRowDeleted != null) {
       widget.onRowDeleted!(deletedRow);
